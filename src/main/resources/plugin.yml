@@ -1,0 +1,13 @@
+name: ${name}
+main: ${mainClass}
+version: ${version}
+author: ${author}
+api-version: ${apiVersion}
+prefix: ${prefix}
+
+commands:
+  enchantextractor:
+    description: Extract a enchantment from items you are holding.
+    aliases:
+      - ee
+    permission: enchantextractor.command
