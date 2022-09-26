@@ -44,9 +44,9 @@ class EnchantExtractorCommand: CommandExecutor {
             return
         }
         plugin.reloadConfig()
-        val list = mutableListOf<String>()
+        val list = mutableMapOf<String, String>()
         for(i in Store.configKeys){
-            plugin.config.getString(i)?.let { list.add(it) }
+            plugin.config.getString(i)?.let { list+=i to it }
         }
         Store.config = list
         this.sender.sendMessage("Successfully reloaded!")
