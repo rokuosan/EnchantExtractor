@@ -9,5 +9,13 @@ class Store{
         var server: Server? = null
         var plugin: JavaPlugin? = null
 
+        var config = listOf<String>()
+
+        val configKeys = listOf(
+            "cost.item",
+            "cost.amount",
+            "cost.level",
+            "cost.book",
+        )
     }
 }
