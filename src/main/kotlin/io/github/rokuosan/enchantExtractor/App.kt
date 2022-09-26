@@ -7,6 +7,12 @@ import io.github.rokuosan.enchantExtractor.command.ExtractTabCompletion
 import org.bukkit.plugin.java.JavaPlugin
 
 class App: JavaPlugin() {
+    companion object{
+        fun log(text: String){
+            Store.plugin?.logger?.info(text)
+        }
+    }
+
     override fun onEnable() {
         // Generate Config file
         saveDefaultConfig()
