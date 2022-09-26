@@ -1,5 +1,5 @@
 cost:
-  item:
-  amount:
-  level: 30
+  item: LAPIS_LAZULI
+  amount: 3
+  level: 10
   book: 1

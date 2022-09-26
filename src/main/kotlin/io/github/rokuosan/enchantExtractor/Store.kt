@@ -9,7 +9,7 @@ class Store{
         var server: Server? = null
         var plugin: JavaPlugin? = null
 
-        var config = listOf<String>()
+        var config = mapOf<String, String>()
 
         val configKeys = listOf(
             "cost.item",
