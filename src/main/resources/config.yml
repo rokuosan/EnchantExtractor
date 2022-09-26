@@ -1,1 +1,5 @@
-version:
+cost:
+  item:
+  amount:
+  level: 30
+  book: 1
