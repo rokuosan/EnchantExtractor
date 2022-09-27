@@ -10,6 +10,7 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.EnchantmentStorageMeta
 import kotlin.math.abs
 
 class ExtractCommand: CommandExecutor {
@@ -47,8 +48,7 @@ class ExtractCommand: CommandExecutor {
         }
 
         // Cost Item Check
-//        val costItem = ItemStack(Material.getMaterial(Store.config["cost.item"]?:"LAPIS_LAZULI")!!)
-        val costItem = ItemStack(Material.LAPIS_LAZULI)
+        val costItem = ItemStack(Material.getMaterial(Store.config["cost.item"]?:"LAPIS_LAZULI")!!)
         val costAmount = Store.config["cost.amount"]?.toInt()?: 0
         var itemAmount = 0
         var bookAmount = 0
@@ -58,21 +58,21 @@ class ExtractCommand: CommandExecutor {
             if(i.type.name == costItem.type.name) itemAmount+= i.amount
         }
         if(itemAmount < costAmount){
-            sender.sendMessage("不足アイテム: ${costItem.type.name} x ${abs(itemAmount-costAmount)}")
+            sender.sendMessage("コストアイテムが不足しています: ${costItem.type.name} x ${abs(itemAmount-costAmount)}")
             return true
         }
 
         // Level check
         val costLevel = Store.config["cost.level"]?.toInt()?: 10
         if(sender.level < costLevel){
-            sender.sendMessage("不足レベル: ${abs(costLevel-sender.level)}")
+            sender.sendMessage("レベルが不足しています: ${abs(costLevel-sender.level)}レベル")
             return true
         }
 
         // Book check
         val costBookAmount = Store.config["cost.book"]?.toInt()?:1
         if(bookAmount < costBookAmount){
-            sender.sendMessage("不足本数: ${abs(bookAmount-costAmount)}")
+            sender.sendMessage("本が不足しています: ${abs(bookAmount-costAmount)}冊")
             return true
         }
 
@@ -84,7 +84,9 @@ class ExtractCommand: CommandExecutor {
 
         // Give Book
         val book = ItemStack(Material.ENCHANTED_BOOK)
-        book.addUnsafeEnchantment(enchantment, level)
+        val esm: EnchantmentStorageMeta = book.itemMeta as EnchantmentStorageMeta
+        esm.addStoredEnchant(enchantment, level, true)
+        book.itemMeta = esm
         sender.inventory.addItem(book)
 
         sender.sendMessage("エンチャントを抽出しました")
