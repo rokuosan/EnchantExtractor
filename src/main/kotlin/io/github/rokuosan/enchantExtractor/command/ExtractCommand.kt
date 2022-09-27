@@ -12,6 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
 import kotlin.math.abs
+import kotlin.math.min
 
 class ExtractCommand: CommandExecutor {
 
@@ -49,7 +50,7 @@ class ExtractCommand: CommandExecutor {
 
         // Cost Item Check
         val costItem = ItemStack(Material.getMaterial(Store.config["cost.item"]?:"LAPIS_LAZULI")!!)
-        val costAmount = Store.config["cost.amount"]?.toInt()?: 0
+        var costAmount = Store.config["cost.amount"]?.toInt()?: 0
         var itemAmount = 0
         var bookAmount = 0
         for(i in sender.inventory){
@@ -70,7 +71,7 @@ class ExtractCommand: CommandExecutor {
         }
 
         // Book check
-        val costBookAmount = Store.config["cost.book"]?.toInt()?:1
+        var costBookAmount = Store.config["cost.book"]?.toInt()?:1
         if(bookAmount < costBookAmount){
             sender.sendMessage("本が不足しています: ${abs(bookAmount-costAmount)}冊")
             return true
@@ -78,8 +79,22 @@ class ExtractCommand: CommandExecutor {
 
         // Remove Cost
         sender.level -= costLevel
-        sender.inventory.addItem(ItemStack(Material.LAPIS_LAZULI, -costAmount))
-        sender.inventory.addItem(ItemStack(Material.BOOK, -costBookAmount))
+        for(i in sender.inventory){
+            if(i == null) continue
+            if(i.type.name == costItem.type.name){
+                val a = min(i.amount, costAmount)
+                i.amount -= a
+                costAmount -= a
+                sender.updateInventory()
+            }
+            if(i.type.name == Material.BOOK.name){
+                val a = min(i.amount, costBookAmount)
+                i.amount -= a
+                costBookAmount -= a
+                sender.updateInventory()
+            }
+        }
+        sender.updateInventory()
         item.removeEnchantment(enchantment!!)
 
         // Give Book
