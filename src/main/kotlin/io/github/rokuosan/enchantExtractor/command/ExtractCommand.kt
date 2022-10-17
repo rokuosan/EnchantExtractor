@@ -73,7 +73,7 @@ class ExtractCommand: CommandExecutor {
         // Book check
         var costBookAmount = Store.config["cost.book"]?.toInt()?:1
         if(bookAmount < costBookAmount){
-            sender.sendMessage("本が不足しています: ${abs(bookAmount-costAmount)}冊")
+            sender.sendMessage("本が不足しています: ${abs(costAmount-bookAmount)}冊")
             return true
         }
 
